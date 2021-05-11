@@ -1,5 +1,5 @@
 {
-  "name": "calls-maker",
+  "name": "@assezfacile/calls-maker",
   "version": "0.1.0",
   "description": "Library to help making phone calls",
   "keywords": [

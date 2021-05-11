@@ -2,8 +2,13 @@ class SignalwireOptions {
     accountSid = '';
     authToken = '';
     spaceUrl = '';
+    callerId = '';
+    numbers = [];
 
     constructor(obj = {}) {
+        obj.numbers = obj.numbers || [];
+        obj.callerId = obj.callerId || obj.numbers[0] || '';
+
         Object.assign(this, obj);
     }
 }
@@ -11,8 +16,13 @@ class SignalwireOptions {
 class TwilioOptions {
     accountSid = '';
     authToken = '';
+    callerId = '';
+    numbers = [];
 
     constructor(obj = {}) {
+        obj.numbers = obj.numbers || [];
+        obj.callerId = obj.callerId || obj.numbers[0] || '';
+
         Object.assign(this, obj);
     }
 }

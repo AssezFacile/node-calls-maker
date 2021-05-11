@@ -1,13 +1,13 @@
 class CallOptions {
     id = '';
     xmlFileUrl = '';
-    callerId = '';
-    callerNumber = '';
     calleeNumber = '';
+    calleeExtension = '';
     isRecording = false;
 
     constructor(obj = {}) {
         obj.id = obj.id || (new Date()).getTime();
+
         Object.assign(this, obj);
     }
 }
