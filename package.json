@@ -1,11 +1,12 @@
 {
   "name": "@assezfacile/calls-maker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Library to help making phone calls",
   "keywords": [
     "nodejs",
     "phone call",
-    "signalwire"
+    "signalwire",
+    "twilio"
   ],
   "homepage": "https://github.com/mickjol/node-calls-maker#readme",
   "bugs": {
@@ -26,7 +27,9 @@
     "test": "mocha --reporter spec",
     "push": "npm publish"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jstoxml": "^2.0.5"
+  },
   "optionalDependencies": {
     "@signalwire/node": "^2.3.3",
     "cors": "^2.8.5",

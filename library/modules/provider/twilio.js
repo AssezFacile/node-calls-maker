@@ -1,5 +1,5 @@
-const { ServicesOptions } = require('../models/services-options');
-const { CallOptions } = require('../models/call-options');
+const { ServicesOptions } = require('../../models/services-options');
+const { CallOptions } = require('../../models/call-options');
 
 let client = null;
 let servicesOptions = null;
