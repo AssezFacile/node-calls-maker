@@ -7,7 +7,7 @@ exports.getRoot = (req, res) => {
 
 exports.getAudio = (getAudioPathFile) => {
     return (req, res) => {
-        getAudioPathFile(req.params).then((pathFile) => {
+        getAudioPathFile(req.query, req.params, req.body).then((pathFile) => {
             const extension = path.extname(pathFile);
             const allowed = ['.mp3', '.wav', '.aif'];
     

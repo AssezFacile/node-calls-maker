@@ -1,6 +1,6 @@
 exports.receivingEvent = (callback) => {
     return (req, res) => {
-        callback(req.params, req.body).then((response) => {
+        callback(req.query, req.params, req.body).then((response) => {
             if (response) {
                 res.status(200).send(response);
             } else {
@@ -12,7 +12,7 @@ exports.receivingEvent = (callback) => {
 
 exports.receivingError = (callback) => {
     return (req, res) => {
-        callback(req.params, req.body).then((response) => {
+        callback(req.query, req.params, req.body).then((response) => {
             if (response) {
                 res.status(200).send(response);
             } else {
@@ -24,8 +24,8 @@ exports.receivingError = (callback) => {
 
 exports.createReceivingCustom = (getVoiceResponse) => {
     return (req, res) => {
-        getVoiceResponse(req.params).then((response) => {
-            res.send(response);
+        getVoiceResponse(req.query, req.params, req.body).then((response) => {
+            res.send(response.replace('{service-path}', 'signalwire'));
         });
     };
 };

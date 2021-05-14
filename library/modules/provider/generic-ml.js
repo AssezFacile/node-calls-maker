@@ -11,24 +11,51 @@ class GenericMl {
 
     constructor() { }
 
-    say = (content) => {
+    say = (options, content) => {
+        if (typeof(options) === 'string') {
+            content = options;
+            options = {};
+        }
+
         this.dom._content.push({
             _name: 'Say',
             _content: content,
         });
     }
 
-    pause = (time) => {
+    pause = (options, time) => {
+        if (typeof(options) === 'string') {
+            time = options;
+            options = {};
+        }
+
         this.dom._content.push({
             _name: 'Pause',
             _content: time,
         });
     }
 
-    play = (url) => {
+    play = (options, url) => {
+        if (typeof(options) === 'string') {
+            url = options;
+            options = {};
+        }
+
         this.dom._content.push({
             _name: 'Play',
             _content: url,
+        });
+    }
+
+    redirect= (options, url) => {
+        if (typeof(options) === 'string') {
+            url = options;
+            options = {};
+        }
+
+        this.dom._content.push({
+            _name: 'Redirect',
+            _content: url
         });
     }
 

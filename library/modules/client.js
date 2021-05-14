@@ -1,6 +1,7 @@
 const { ServicesOptions } = require('../models/services-options');
 const { ClientService } = require('../models/client-service');
 const clientsRestApi = [];
+let serviceOptions = null;
 
 module.exports = {
     getClient: (clientService) => {
@@ -10,10 +11,15 @@ module.exports = {
     getClients: () => {
         return clientsRestApi;
     },
+    getHost: () => {
+        return `${serviceOptions.externalHost}${serviceOptions.basicUrl}`;
+    },
     serviceIsInitialize: (clientService) => {
         return clientsRestApi.findIndex(api => api.service === clientService) > -1;
     },
     initialize: (options = new ServicesOptions()) => {
+        serviceOptions = options;
+
         if (options.signalwire.accountSid) {
             const client = require('./provider/signalwire');
             client.initialize(options);
