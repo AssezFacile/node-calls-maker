@@ -3,6 +3,10 @@ const { ClientService } = require('../models/client-service');
 const clientsRestApi = [];
 
 module.exports = {
+    getClient: (clientService) => {
+        const service = clientsRestApi.find(api => api.service === clientService);
+        return service.client;
+    },
     getClients: () => {
         return clientsRestApi;
     },

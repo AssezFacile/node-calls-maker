@@ -7,16 +7,16 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = 8080;
-const HOST = `http://209.171.160.246:${PORT}`;
+const HOST = `http://example.com:${PORT}`;
 const BASIC_URL_FOR_CALLSMAKER = '/calls-maker';
-const SIGNALWIRE_ACCOUNTSID = 'd1e89cc8-45e7-43d3-a4c5-7376479636b2';
-const SIGNALWIRE_AUTHTOKEN = 'PT777423b550828d44bafa3b5e58378aa62a77824898f63c9a';
-const SIGNALWIRE_SPACEURL = 'assezfacile.signalwire.com';
-const SIGNALWIRE_CALLER_NUMBER = '+15812211176';
-const TWILIO_ACCOUNTSID = 'AC2e8115632a73353b09ca7e9ab911f258';
-const TWILIO_AUTHTOKEN = '91aac9d089b6377c1cf1c4ee8a697c5a';
-const TWILIO_CALLER_NUMBER = '+15817009337';
-const NUMBER_TO_CALL = '+14182151415';
+const SIGNALWIRE_ACCOUNTSID = '';
+const SIGNALWIRE_AUTHTOKEN = '';
+const SIGNALWIRE_SPACEURL = '';
+const SIGNALWIRE_CALLER_NUMBER = '';
+const TWILIO_ACCOUNTSID = '';
+const TWILIO_AUTHTOKEN = '';
+const TWILIO_CALLER_NUMBER = '';
+const NUMBER_TO_CALL = '';
 
 const options = new CallsMakerOptions({
     getAudioPathFile: (params) => {
@@ -71,6 +71,12 @@ client.initialize(new ServicesOptions({
     }),
 }));
 
+/* Get information of one call *//*
+call.getInfo('b1816381-7a1a-445c-8740-9690d6d79886').then(data => console.log(data));
+call.getInfo('CAbb857318fb62dd9091fd0a36c50f8e8a').then(data => console.log(data));
+*/
+
+/* Generate a new call *//*
 call.create(new CallOptions({
     xmlFileUrl: 'main-call',
     calleeNumber: NUMBER_TO_CALL,
@@ -79,3 +85,4 @@ call.create(new CallOptions({
 }).catch((error) => {
     console.log('error when sending', error);
 });
+*/

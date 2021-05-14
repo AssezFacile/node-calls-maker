@@ -1,5 +1,7 @@
 const { ServicesOptions } = require('../../models/services-options');
 const { CallOptions } = require('../../models/call-options');
+const { CallInformation } = require('../../models/calls-maker-result');
+const { ClientService } = require('../../models/client-service');
 
 let client = null;
 let servicesOptions = null;
@@ -31,7 +33,7 @@ exports.initialize = (options = new ServicesOptions()) => {
     client = require('twilio')(options.twilio.accountSid, options.twilio.authToken);
 }
 
-exports.call = (options = new CallOptions()) => {
+exports.createCall = (options = new CallOptions()) => {
     const callOptions = buildCompleteCallOptions(options);
 
     return new Promise((resolve, reject) => {
@@ -42,3 +44,21 @@ exports.call = (options = new CallOptions()) => {
         });
     });
 };
+
+exports.getCallInformation = async (callSid) => {
+    return new Promise((resolve, reject) => {
+        client.calls(callSid).fetch().then((data) => {
+            resolve(new CallInformation({
+                serviceUse: ClientService.TWILIO,
+                serviceResponse: data,
+                id: data.sid,
+                to: data.to,
+                from: data.from,
+                price: Math.abs(data.price),
+                duration: data.duration,
+            }));
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}

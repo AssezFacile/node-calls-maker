@@ -1,5 +1,7 @@
 const { ServicesOptions } = require('../../models/services-options');
 const { CallOptions } = require('../../models/call-options');
+const { ClientService } = require('../../models/client-service');
+const { CallInformation } = require('../../models/calls-maker-result');
 
 let client = null;
 let servicesOptions = null;
@@ -35,7 +37,7 @@ exports.initialize = (options = new ServicesOptions()) => {
     });
 }
 
-exports.call = (options = new CallOptions()) => {
+exports.createCall = (options = new CallOptions()) => {
     const callOptions = buildCompleteCallOptions(options);
 
     return new Promise((resolve, reject) => {
@@ -46,3 +48,21 @@ exports.call = (options = new CallOptions()) => {
         });
     });
 };
+
+exports.getCallInformation = (callSid) => {
+    return new Promise((resolve, reject) => {
+        client.calls(callSid).fetch().then((data) => {
+            resolve(new CallInformation({
+                serviceUse: ClientService.SIGNALWIRE,
+                serviceResponse: data,
+                id: data.sid,
+                to: data.to,
+                from: data.from,
+                price: Math.abs(data.price),
+                duration: data.duration,
+            }));
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
