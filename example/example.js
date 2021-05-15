@@ -19,23 +19,33 @@ const TWILIO_CALLER_NUMBER = '';
 const NUMBER_TO_CALL = '';
 
 const options = new CallsMakerOptions({
-    getAudioPathFile: (params) => {
+    getAudioPathFile: async (query, params, body) => {
         return `${__dirname}/audio.mp3`;
     },
-    receivingEvent: (params, body) => {
+    receivingEvent: async (query, params, body) => {
         console.log('receiving event', params, body);
     },
-    receivingError: (params, body) => {
+    receivingError: async (query, params, body) => {
         console.log('receiving error', params, body);
     },
     customML: [
         new CallsCustomML({
             url: 'main-call',
-            action: (params) => {
+            action: async (query, params, body) => {
                 const response = new ml.VoiceResponse;
 
                 response.say('Hello world!');
                 response.pause(2);
+                response.redirect(`${params.id}/redirect-call-to`);
+
+                return response.toString();
+            }
+        }),
+        new CallsCustomML({
+            url: 'redirect-call-to',
+            action: async (query, params, body) => {
+                const response = new ml.VoiceResponse;
+
                 response.play(`${HOST}${BASIC_URL_FOR_CALLSMAKER}/audio/-specific-id-/audio.mp3`);
                 response.hangup();
 

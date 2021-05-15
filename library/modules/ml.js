@@ -15,20 +15,22 @@ const customRedirect = function(options, url) {
     return this.originalRedirect(options, `${getHost()}/{service-path}/${url}`);
 };
 
+let usedVoiceResponse = null;
+
 module.exports = {
     get VoiceResponse() {
-        let voiceResponse = null;
-        
-        if (serviceIsInitialize(ClientService.SIGNALWIRE)) {
-            voiceResponse = require('@signalwire/node').RestClient.LaML.VoiceResponse;
+        if (usedVoiceResponse) {
+            return usedVoiceResponse;
+        } else if (serviceIsInitialize(ClientService.SIGNALWIRE)) {
+            usedVoiceResponse = require('@signalwire/node').RestClient.LaML.VoiceResponse;
         } else if (serviceIsInitialize(ClientService.TWILIO)) {
-            voiceResponse = require('twilio').twiml.VoiceResponse;
+            usedVoiceResponse = require('twilio').twiml.VoiceResponse;
         } else {
-            voiceResponse = require('./provider/generic-ml');
+            usedVoiceResponse = require('./provider/generic-ml');
         }
-
-        voiceResponse.prototype.originalRedirect = voiceResponse.prototype.redirect;
-        voiceResponse.prototype.redirect = customRedirect;
-        return voiceResponse;
+    
+        usedVoiceResponse.prototype.originalRedirect = usedVoiceResponse.prototype.redirect;
+        usedVoiceResponse.prototype.redirect = customRedirect;
+        return usedVoiceResponse;
     }
 };
