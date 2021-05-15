@@ -19,19 +19,20 @@ class GenericMl {
 
         this.dom._content.push({
             _name: 'Say',
-            _content: content,
+            _content: content || '',
+            _attrs: options
         });
     }
 
-    pause = (options, time) => {
-        if (typeof(options) === 'string') {
-            time = options;
-            options = {};
+    pause = (options) => {
+        if (typeof(options) === 'string' || typeof(options) === 'number') {
+            options = { length: options };
         }
 
         this.dom._content.push({
             _name: 'Pause',
-            _content: time,
+            _content: '',
+            _attrs: options
         });
     }
 
@@ -43,7 +44,8 @@ class GenericMl {
 
         this.dom._content.push({
             _name: 'Play',
-            _content: url,
+            _content: url || '',
+            _attrs: options
         });
     }
 
@@ -55,7 +57,8 @@ class GenericMl {
 
         this.dom._content.push({
             _name: 'Redirect',
-            _content: url
+            _content: url,
+            _attrs: options
         });
     }
 
@@ -66,7 +69,7 @@ class GenericMl {
     }
 
     toString = () => {
-        return toXML(this.dom);
+        return toXML(this.dom, this.options);
     }
 }
 

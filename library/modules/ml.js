@@ -15,6 +15,23 @@ const customRedirect = function(options, url) {
     return this.originalRedirect(options, `${getHost()}/{service-path}/${url}`);
 };
 
+const resetSomeBasicMethod = () => {
+    if (typeof(usedVoiceResponse) === 'Function') {
+        usedVoiceResponse.prototype.originalRedirect = usedVoiceResponse.prototype.redirect;
+        usedVoiceResponse.prototype.redirect = customRedirect;
+    } else {
+        class CustomMl extends (usedVoiceResponse) {
+            constructor() {
+                super();
+                this.originalRedirect = this.redirect;
+                this.redirect = customRedirect;
+            }
+        }
+
+        usedVoiceResponse = CustomMl;
+    }
+}
+
 let usedVoiceResponse = null;
 
 module.exports = {
@@ -28,9 +45,8 @@ module.exports = {
         } else {
             usedVoiceResponse = require('./provider/generic-ml');
         }
-    
-        usedVoiceResponse.prototype.originalRedirect = usedVoiceResponse.prototype.redirect;
-        usedVoiceResponse.prototype.redirect = customRedirect;
+
+        resetSomeBasicMethod();
         return usedVoiceResponse;
     }
 };

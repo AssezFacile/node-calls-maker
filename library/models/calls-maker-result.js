@@ -1,8 +1,8 @@
 class CallsMakerResult {
     success = false;
-    serviceUse = null;
+    serviceUse = '';
     serviceResponse = {};
-    errors = null;
+    errors = [];
 
     constructor(obj = {}) {
         Object.assign(this, obj);

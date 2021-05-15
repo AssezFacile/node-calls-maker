@@ -1,6 +1,6 @@
 {
   "name": "@assezfacile/calls-maker",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "Library to help making phone calls",
   "keywords": [
     "nodejs",

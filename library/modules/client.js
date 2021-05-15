@@ -6,7 +6,7 @@ let serviceOptions = null;
 module.exports = {
     getClient: (clientService) => {
         const service = clientsRestApi.find(api => api.service === clientService);
-        return service.client;
+        return service ? service.client : null;
     },
     getClients: () => {
         return clientsRestApi;

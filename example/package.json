@@ -13,6 +13,6 @@
     "start": "node example.js"
   },
   "dependencies": {
-    "@assezfacile/calls-maker": "^0.3.0"
+    "@assezfacile/calls-maker": "^1.0.0"
   }
 }
