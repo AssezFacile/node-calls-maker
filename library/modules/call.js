@@ -16,31 +16,47 @@ module.exports = {
         return new CallInformation();
     },
 
-    create: (options = new CallOptions()) => {
-        const errors = [];
+    create: (callOptions = new CallOptions()) => {
+        const result = new CallsMakerResult();
         const clientsRestApi = getClients();
 
         return new Promise(async (resolve, reject) => {
             for (let i = 0, j = clientsRestApi.length; i < j; i++) {
                 try {
-                    const response = await clientsRestApi[i].client.createCall(options);
+                    const numberOptions = await clientsRestApi[i].client.getNumberOptions();
 
-                    resolve(new CallsMakerResult({
-                        success: true,
-                        serviceUse: clientsRestApi[i].service,
-                        serviceResponse: response,
-                        errors: errors
-                    }));
-                    break;
+                    if (numberOptions.outgoingVoice) {
+                        result.serviceUse = clientsRestApi[i].service;
+                        result.responses[clientsRestApi[i].service] = await clientsRestApi[i].client.createCall(callOptions);
+                        break;
+                    } else {
+                        result.errors.push(new Error(`The voice is not available for "${clientsRestApi[i].service}"`));
+                    }
                 } catch (error) {
-                    errors.push(error);
+                    result.errors.push(error);
                 };
             }
 
-            reject(new CallsMakerResult({
-                success: false,
-                errors: errors,
-            }));
+            resolve(result);
+        });
+    },
+
+    getServiceOptions: () => {
+        const result = new CallsMakerResult({
+            success: true,
+        });
+        const clientsRestApi = getClients();
+
+        return new Promise(async (resolve, reject) => {
+            for (let i = 0, j = clientsRestApi.length; i < j; i++) {
+                try {
+                    result.responses[clientsRestApi[i].service] = await clientsRestApi[i].client.getNumberOptions();
+                } catch (error) {
+                    result.errors.push(error);
+                }
+            }
+
+            resolve(result);
         });
     }
 };

@@ -15,9 +15,11 @@ const generateGenericRouter = (options) => {
 const generateSignalwireRouter = (options) => {
     const signalwireEventCallback = signalwire.receivingEvent(options.receivingEvent);
     const signalwireErrorCallback = signalwire.receivingError(options.receivingError);
+    const signalwireReceiveCallCallback = signalwire.receivingCall(options.receivingCall);
 
     router.post('/signalwire/:id/event', options.corsOptions || signalwireEventCallback, signalwireEventCallback);
     router.post('/signalwire/:id/error/:error', options.corsOptions || signalwireErrorCallback, signalwireErrorCallback);
+    router.post('/signalwire/receiving/call', options.corsOptions || signalwireReceiveCallCallback, signalwireReceiveCallCallback);
 
     options.customML.forEach(customXml => {
         const customCallback = signalwire.createReceivingCustom(customXml.action);
@@ -28,9 +30,11 @@ const generateSignalwireRouter = (options) => {
 const generateTwilioRouter = (options) => {
     const twilioEventCallback = twilio.receivingEvent(options.receivingEvent);
     const twilioErrorCallback = twilio.receivingError(options.receivingError);
+    const twilioReceiveCallCallback = twilio.receivingCall(options.receivingCall);
 
     router.post('/twilio/:id/event', options.corsOptions || twilioEventCallback, twilioEventCallback);
     router.post('/twilio/:id/error/:error', options.corsOptions || twilioErrorCallback, twilioErrorCallback);
+    router.post('/twilio/receiving/call', options.corsOptions || twilioReceiveCallCallback, twilioReceiveCallCallback);
 
     options.customML.forEach(customXml => {
         const customCallback = twilio.createReceivingCustom(customXml.action);

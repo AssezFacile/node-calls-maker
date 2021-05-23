@@ -1,7 +1,7 @@
 class CallsMakerResult {
     success = false;
     serviceUse = '';
-    serviceResponse = {};
+    responses = {};
     errors = [];
 
     constructor(obj = {}) {

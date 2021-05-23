@@ -28,6 +28,7 @@
     "push": "npm publish"
   },
   "dependencies": {
+    "fetch": "^1.1.0",
     "jstoxml": "^2.0.5"
   },
   "optionalDependencies": {

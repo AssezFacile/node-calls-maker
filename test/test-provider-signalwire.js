@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+const { expect, assert } = require('chai');
 const signalwire = require('proxyquire')('../library/modules/provider/signalwire', {
     '@signalwire/node': {
         RestClient: function(accountSid) {
@@ -12,11 +12,18 @@ const signalwire = require('proxyquire')('../library/modules/provider/signalwire
             }
         }
     },
+    'fetch': {
+        fetchUrl: (url, options, callback) => {
+            callback(null, null, `{"incoming_phone_numbers": ${JSON.stringify(serviceRestApiNumber)}}`);
+        }
+    }
 });
 
 const { ServicesOptions, SignalwireOptions } = require('../library/models/services-options');
 const { CallOptions } = require('../library/models/call-options');
+const { NumberOptions } = require('../library/models/number-options');
 
+let serviceRestApiNumber = [];
 const validOptions = new ServicesOptions({
     signalwire: new SignalwireOptions({
         accountSid: 'aAccountSid',
@@ -48,18 +55,20 @@ describe('provider signalwire', () => {
             signalwire.initialize(validOptions);
         });
 
-        it('with options should not throw error', () => {
-            expect(() => {
-                signalwire.createCall(new CallOptions({
-                    calleeNumber: 'aPhoneNumber',
-                }));
-            }).to.not.throw();
+        it('without options should throw error', () => {
+            expect(() => { new CallOptions(); }).to.throw();
         });
 
-        it('without options should throw error', () => {
-            expect(() => {
-                signalwire.createCall(new CallOptions());
-            }).to.throw();
+        it('with options should not throw error', () => {
+            const callOptions = new CallOptions({
+                calleeNumber: 'aPhoneNumber',
+            });
+            
+            signalwire.createCall(callOptions).then(() => {
+                done();
+            }).catch(() => {
+                done(new Error('Expected method to be accepted'));
+            });            
         });
     });
 
@@ -69,9 +78,34 @@ describe('provider signalwire', () => {
         });
 
         it('should not throw error', () => {
-            expect(() => {
-                signalwire.getCallInformation('aCallSID');
-            }).to.not.throw();
+            signalwire.getCallInformation('aCallSID').then((options) => {
+                done();
+            }).catch(() => {
+                done(new Error('Expected method to be accepted'));
+            });
+        });
+    });
+
+    describe('when get number options with signalwire rest client', () => {
+        beforeEach(() => {
+            signalwire.initialize(validOptions);
+        });
+
+        it('without number should throw error', (done) => {
+            serviceRestApiNumber = [];
+            signalwire.getNumberOptions().then((options) => {
+                done(new Error('Expected method to be rejected'));
+            }).catch(() => {
+                done();
+            });
+        });
+
+        it('with number should return a NumberOptions', async() => {
+            serviceRestApiNumber = [{
+                capabilities: { voice: true }
+            }];
+            const options = await signalwire.getNumberOptions();
+            assert.instanceOf(options, NumberOptions);
         });
     });
 });

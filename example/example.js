@@ -1,22 +1,12 @@
 // Uncomment to test the local library
-//const { expressJs, ml, client, call, CallsMakerOptions, CallsCustomML, ServicesOptions, SignalwireOptions, TwilioOptions, CallOptions } = require('../index');
+const { expressJs, ml, client, call, CallsMakerOptions, CallsCustomML, ServicesOptions, SignalwireOptions, TwilioOptions, CallOptions } = require('../index');
 // Uncomment to test the repository library
-const { expressJs, ml, client, call, CallsMakerOptions, CallsCustomML, ServicesOptions, SignalwireOptions, TwilioOptions, CallOptions } = require('@assezfacile/calls-maker');
+//const { expressJs, ml, client, call, CallsMakerOptions, CallsCustomML, ServicesOptions, SignalwireOptions, TwilioOptions, CallOptions } = require('@assezfacile/calls-maker');
 
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = 8080;
-const HOST = `http://example.com:${PORT}`;
-const BASIC_URL_FOR_CALLSMAKER = '/calls-maker';
-const SIGNALWIRE_ACCOUNTSID = '';
-const SIGNALWIRE_AUTHTOKEN = '';
-const SIGNALWIRE_SPACEURL = '';
-const SIGNALWIRE_CALLER_NUMBER = '';
-const TWILIO_ACCOUNTSID = '';
-const TWILIO_AUTHTOKEN = '';
-const TWILIO_CALLER_NUMBER = '';
-const NUMBER_TO_CALL = '';
 
 const options = new CallsMakerOptions({
     getAudioPathFile: async (query, params, body) => {
@@ -28,6 +18,15 @@ const options = new CallsMakerOptions({
     receivingError: async (query, params, body) => {
         console.log('receiving error', params, body);
     },
+    receivingCall: async (query, params, body) => {
+        const response = new ml.VoiceResponse;
+
+        response.say('Hi world! thanks for calling');
+        response.pause(2);
+        response.redirect(`incoming-call/redirect-call-to`);
+
+        return response;
+    },
     customML: [
         new CallsCustomML({
             url: 'main-call',
@@ -38,7 +37,7 @@ const options = new CallsMakerOptions({
                 response.pause(2);
                 response.redirect(`${params.id}/redirect-call-to`);
 
-                return response.toString();
+                return response;
             }
         }),
         new CallsCustomML({
@@ -49,7 +48,7 @@ const options = new CallsMakerOptions({
                 response.play(`${HOST}${BASIC_URL_FOR_CALLSMAKER}/audio/-specific-id-/audio.mp3`);
                 response.hangup();
 
-                return response.toString();
+                return response;
             }
         })
     ],
@@ -96,3 +95,5 @@ call.create(new CallOptions({
     console.log('error when sending', error);
 });
 */
+
+call.getServiceOptions().then(options => console.log(options));

@@ -13,6 +13,7 @@ class CallsMakerOptions {
     getAudioPathFile = () => {};
     receivingEvent = () => {};
     receivingError = () => {};
+    receivingCall = () => {};
 
     constructor(obj = {}) {
         Object.assign(this, obj);

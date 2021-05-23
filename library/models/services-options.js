@@ -29,7 +29,7 @@ class TwilioOptions {
 
 class ServicesOptions {
     externalHost = '';
-    basicUrl = '';
+    basicUrl = 'calls-maker';
     signalwire = new SignalwireOptions();
     twilio = new TwilioOptions();
 
